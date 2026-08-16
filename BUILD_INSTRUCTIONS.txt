@@ -1,0 +1,121 @@
+JARVIS ANDROID APP - BUILD INSTRUCTIONS (no Linux install needed)
+=====================================================================
+
+HOW THIS WORKS
+-----------------
+Building an Android app genuinely requires Linux tools that don't run
+on Windows - that part's unavoidable. But instead of installing Linux
+on YOUR PC, we're using GitHub Actions: you upload your files to a
+free GitHub account through their normal website, and GitHub's own
+servers do the building for you in the cloud. You never touch a Linux
+system yourself. Everything below is done through a web browser.
+
+BE REALISTIC GOING IN
+------------------------
+The build itself can still fail on the first try or two - that's
+normal for Android app building generally, not specific to this
+method. The difference is you're just reading error messages on a
+webpage instead of wrestling with a terminal.
+
+PART 1 - Create a GitHub account (skip if you have one)
+---------------------------------------------------------------
+1. Go to https://github.com and sign up - it's free.
+
+PART 2 - Create a repository for the project
+--------------------------------------------------
+1. Click the "+" icon (top right) -> "New repository."
+2. Name it something like "jarvis-android".
+3. IMPORTANT: set it to Private, not Public - your config.py will
+   have your API key in it, and a private repo keeps that from being
+   publicly visible.
+4. Click "Create repository."
+
+PART 3 - Add your API key to config.py (on your PC first)
+-----------------------------------------------------------------
+Before uploading, open config.py in PyCharm (or Notepad) and paste
+your OpenRouter key into the OPENROUTER_API_KEY line, and your
+ElevenLabs key too if you want that voice. Save the file.
+
+PART 4 - Upload the project (all in one go)
+--------------------------------------------------
+I've packaged everything into one zip file (jarvis-android-project.zip)
+with the folders already set up correctly, so you don't have to
+create anything by hand on GitHub's side.
+
+1. Download jarvis-android-project.zip to your PC.
+2. Right-click it -> "Extract All" (or double-click if you use
+   7-Zip/WinRAR) - this unzips it into a normal folder.
+3. IMPORTANT: open that extracted folder and swap in the config.py
+   you edited in Part 3 (the one with your actual API key in it),
+   replacing the placeholder one from the zip.
+4. Open the extracted folder in File Explorer. Select everything
+   inside it - press Ctrl+A - including the .github folder (it may
+   look invisible/greyed out depending on your Explorer settings,
+   but Ctrl+A will still select it; if you don't see it at all, go to
+   View -> Show -> Hidden items in File Explorer first).
+5. Go to your empty GitHub repository's page in your browser. You'll
+   see a link that says "uploading an existing file" - click it.
+6. Drag all the selected files/folders from Explorer straight into
+   that browser upload area, in one drag. GitHub preserves the folder
+   structure automatically, so .github/workflows/build.yml lands in
+   exactly the right place without you having to create it manually.
+7. Scroll down, click "Commit changes."
+8. On the repo's main page afterward, double check you see a folder
+   named ".github" listed alongside your .py files - if it's missing,
+   the drag didn't pick it up and you'll need to use "Add file" ->
+   "Upload files" again just for that folder.
+
+PART 5 - Run the build
+----------------------------
+1. Click the "Actions" tab at the top of your repository.
+2. You should see "Build Jarvis APK" listed on the left - click it.
+3. Click "Run workflow" (a dropdown button) -> "Run workflow" again
+   to confirm.
+4. A new run appears with a yellow dot (in progress). Click into it
+   to watch the log live.
+5. This takes a while - 15-40 minutes isn't unusual for the first
+   run. Feel free to close the tab and check back later; it keeps
+   running on GitHub's side either way.
+6. A green checkmark means success. A red X means it failed - click
+   into the failed step to see the error, and send it to me; that's
+   almost always enough to know what to fix.
+
+PART 6 - Download the APK
+--------------------------------
+1. On the finished (green) workflow run's page, scroll down to
+   "Artifacts."
+2. Click "jarvis-apk" to download it as a .zip - unzip it to get the
+   actual .apk file inside.
+
+PART 7 - Install it on your phone
+----------------------------------------
+1. Get the .apk onto your phone - easiest is uploading it to Google
+   Drive from your PC, then opening Drive on your phone and
+   downloading it there.
+2. Tap the downloaded file. Android will warn about installing from
+   an unknown source - allow it when prompted (this is expected for
+   any app not from the Play Store).
+3. Install, then open Jarvis like any other app.
+
+PART 8 - Making changes later
+------------------------------------
+Any time you edit a file (say, to tweak android_voice.py), just
+re-upload that one file on GitHub (Add file -> Upload files, it'll
+ask to replace the existing one), then repeat Part 5 to rebuild.
+
+WHAT TO EXPECT ONCE IT'S RUNNING
+-------------------------------------
+- Tap "Talk" - Android's own voice input popup appears (the same one
+  Google apps use), listens, then sends whatever it heard to Jarvis.
+- Text works normally - type, hit Enter or Send.
+- ElevenLabs voice plays if configured; otherwise Android's built-in
+  voice is used automatically.
+- android_voice.py is the file most likely to need small adjustments
+  based on your specific phone - if voice breaks, send me the error
+  and we'll fix just that file.
+
+IF YOU'D RATHER BUILD LOCALLY LATER
+------------------------------------------
+If GitHub Actions ever gives you trouble and you decide installing
+WSL2 (Linux inside Windows) is worth it after all, just ask - I can
+give you those steps too. Not needed for now.
