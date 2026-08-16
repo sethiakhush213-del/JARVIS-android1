@@ -14,16 +14,17 @@ jobs:
       - name: Check out the code
         uses: actions/checkout@v4
 
-      - name: Build with Buildozer
-        # This runs buildozer inside a ready-made Docker image that
-        # already has the whole Android SDK/NDK toolchain installed -
-        # far more reliable than installing it all by hand, and it's
-        # GitHub's servers doing the work, not your PC.
-        uses: ArtemSBulgakov/buildozer-action@v1
-        id: buildozer
-        with:
-          command: buildozer android debug
-          buildozer_version: stable
+      - name: Build APK using Kivy's official Buildozer Docker image
+        # Runs buildozer inside Kivy's own maintained Docker image
+        # (kivy/buildozer on Docker Hub) instead of a third-party
+        # wrapper action - the wrapper's own setup script was pulling
+        # in a Java package repository that no longer has files for
+        # the Ubuntu version it runs on, causing the earlier failure.
+        # This image is self-contained and doesn't have that problem.
+        run: |
+          docker run --rm \
+            -v "${{ github.workspace }}":/home/user/hostcwd \
+            kivy/buildozer android debug
 
       - name: Upload the APK
         uses: actions/upload-artifact@v4
