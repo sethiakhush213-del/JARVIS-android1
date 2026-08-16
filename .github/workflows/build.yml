@@ -1,0 +1,32 @@
+name: Build Jarvis APK
+
+# Run this manually from the "Actions" tab on GitHub ("Run workflow"
+# button), or automatically any time you push a change.
+on:
+  workflow_dispatch:
+  push:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the code
+        uses: actions/checkout@v4
+
+      - name: Build with Buildozer
+        # This runs buildozer inside a ready-made Docker image that
+        # already has the whole Android SDK/NDK toolchain installed -
+        # far more reliable than installing it all by hand, and it's
+        # GitHub's servers doing the work, not your PC.
+        uses: ArtemSBulgakov/buildozer-action@v1
+        id: buildozer
+        with:
+          command: buildozer android debug
+          buildozer_version: stable
+
+      - name: Upload the APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: jarvis-apk
+          path: bin/*.apk
